@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>غازي و مها | دعوة زفاف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night: #070a1e;
+    --night-2: #0c1230;
+    --midnight: #10184a;
+    --gold: #d4af6a;
+    --gold-light: #f3dfa8;
+    --gold-soft: #c9a44c;
+    --ivory: #f6efe0;
+    --line: rgba(212,175,106,0.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--night);
+    color: var(--ivory);
+    font-family:'Cairo', sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ---------- STAR CANVAS BACKGROUND ---------- */
+  #starfield{
+    position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;
+  }
+
+  /* ---------- GATE / OPENING SCREEN ---------- */
+  #gate{
+    position:fixed; inset:0; z-index:50; display:flex;
+  }
+  .panel{
+    width:50%; height:100%; background:
+      radial-gradient(ellipse at center, var(--night-2) 0%, var(--night) 70%);
+    position:relative; overflow:hidden;
+    transition: transform 1.4s cubic-bezier(.77,0,.18,1), opacity 1.2s ease 0.3s;
+  }
+  .panel.left{ border-left: 1px solid var(--line); }
+  .panel.right{ border-right: 1px solid var(--line); }
+  .panel .branch{
+    position:absolute; width:140%; opacity:0.5;
+  }
+  .panel.left .branch{ top:-10%; left:-30%; transform: rotate(20deg); }
+  .panel.right .branch{ bottom:-10%; right:-30%; transform: rotate(200deg); }
+
+  #gate.open .panel.left{ transform: translateX(-105%); opacity:0.3; }
+  #gate.open .panel.right{ transform: translateX(105%); opacity:0.3; }
+  #gate.hidden{ pointer-events:none; visibility:hidden; }
+
+  #open-btn{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    display:flex; flex-direction:column; align-items:center; gap:18px;
+    background:none; border:none; cursor:pointer; z-index:5;
+  }
+  .heart{
+    width:74px; height:74px; position:relative;
+    filter: drop-shadow(0 0 14px rgba(212,175,106,0.65));
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  .gate-title{
+    font-family:'Aref Ruqaa', serif; font-size:clamp(2.4rem, 10vw, 3.4rem);
+    color: var(--gold-light);
+    background: linear-gradient(180deg, var(--gold-light), var(--gold-soft));
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 26px rgba(212,175,106,0.35);
+    letter-spacing:2px;
+  }
+  .heart svg{ width:100%; height:100%; }
+  @keyframes pulse{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.08); }
+  }
+  .open-label{
+    font-family:'Aref Ruqaa', serif;
+    font-size:1.15rem; color: var(--gold-light); letter-spacing:1px;
+  }
+  #gate.open #open-btn{ opacity:0; transition: opacity .5s ease; }
+
+  /* ---------- MAIN CONTENT ---------- */
+  main{ position:relative; z-index:1; }
+  section{
+    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding: 60px 24px; position:relative;
+  }
+
+  .basmala{
+    font-family:'Aref Ruqaa', serif; font-size:1.4rem; color:var(--gold-light);
+    margin-bottom:18px; opacity:0; animation: fadeUp 1.2s ease forwards; animation-delay:0s;
+  }
+  .ayah{
+    font-family:'Aref Ruqaa', serif; font-size:1.05rem; color:rgba(246,239,224,0.85);
+    line-height:2.1; max-width:480px; margin: 0 auto 26px;
+    opacity:0; animation: fadeUp 1.2s ease forwards; animation-delay:.15s;
+  }
+  .ornament{
+    width:120px; height:auto; opacity:0.85; margin:0 auto 18px;
+  }
+  .blessing{
+    font-family:'Aref Ruqaa', serif; font-size:1.15rem; color:var(--gold-light);
+    max-width:520px; line-height:2; opacity:0; animation: fadeUp 1.4s ease forwards; animation-delay:.3s;
+  }
+  .eyebrow{
+    font-size:1rem; color: var(--gold); letter-spacing:2px; margin:26px 0 6px;
+    opacity:0; animation: fadeUp 1.2s ease forwards; animation-delay:.6s;
+  }
+  .parents{
+    font-family:'Aref Ruqaa', serif; font-size:1.35rem; line-height:2.3; color:var(--ivory);
+    opacity:0; animation: fadeUp 1.2s ease forwards; animation-delay:.9s;
+  }
+  .invite-line{
+    margin-top:22px; font-size:1.05rem; color:var(--gold-light);
+    opacity:0; animation: fadeUp 1.2s ease forwards; animation-delay:1.2s;
+  }
+
+  .names{
+    margin-top:40px; display:flex; align-items:center; justify-content:center; gap:28px;
+    opacity:0; animation: fadeUp 1.4s ease forwards; animation-delay:1.5s;
+  }
+  .names .name{
+    font-family:'Aref Ruqaa', serif; font-size:clamp(3.4rem, 13vw, 4.5rem);
+    color: var(--gold-light);
+    background: linear-gradient(180deg, var(--gold-light), var(--gold-soft));
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(212,175,106,0.25);
+  }
+  @supports not (-webkit-background-clip:text){
+    .names .name{ -webkit-text-fill-color:initial; color:var(--gold-light); }
+  }
+  .and-star{
+    width:34px; height:34px; animation: spinStar 6s linear infinite;
+  }
+  @keyframes spinStar{ from{ transform:rotate(0);} to{ transform:rotate(360deg);} }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform: translateY(22px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .scroll-cue{
+    position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+    color:var(--gold); font-size:1.6rem; animation: bob 1.8s ease-in-out infinite;
+    opacity:0.8;
+  }
+  @keyframes bob{ 0%,100%{ transform:translate(-50%,0);} 50%{ transform:translate(-50%,10px);} }
+
+  .section-title{
+    font-family:'Aref Ruqaa', serif; font-size:2rem; color:var(--gold-light); margin-bottom:8px;
+  }
+  .section-sub{ color:rgba(246,239,224,0.6); font-size:0.95rem; margin-bottom:44px; }
+
+  /* ---------- COUNTDOWN ---------- */
+  .countdown{
+    display:flex; gap:16px; flex-wrap:wrap; justify-content:center;
+  }
+  .cd-unit{
+    background: linear-gradient(160deg, var(--midnight), var(--night-2));
+    border:1px solid var(--line);
+    border-radius:14px; width:88px; height:96px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    box-shadow: 0 0 22px rgba(212,175,106,0.08), inset 0 0 18px rgba(212,175,106,0.05);
+  }
+  .cd-num{
+    font-size:2.1rem; font-weight:700; color:var(--gold-light);
+    font-variant-numeric: tabular-nums;
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  .cd-num.flip{ transform: translateY(-8px); opacity:0.4; }
+  .cd-label{ font-size:0.8rem; color:rgba(246,239,224,0.65); margin-top:4px; }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{
+    position:relative; max-width:420px; width:100%; margin-top:20px;
+  }
+  .tl-line{
+    position:absolute; top:0; right:50%; transform:translateX(50%);
+    width:2px; height:0%; background: linear-gradient(var(--gold), transparent);
+    transition: height 1.4s ease;
+  }
+  .tl-item{
+    position:relative; padding: 40px 0; opacity:0; transform:translateY(30px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .tl-item.visible{ opacity:1; transform:translateY(0); }
+  .tl-icon{
+    width:64px; height:64px; margin:0 auto 14px; border-radius:50%;
+    background: radial-gradient(circle, var(--midnight), var(--night));
+    border:1px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.7rem; box-shadow: 0 0 24px rgba(212,175,106,0.25);
+  }
+  .tl-title{ font-family:'Aref Ruqaa', serif; font-size:1.5rem; color:var(--gold-light); }
+  .tl-time{ margin-top:6px; font-size:1.1rem; letter-spacing:1px; color:var(--ivory); }
+
+  /* ---------- LOCATION ---------- */
+  .venue-card{
+    background: linear-gradient(160deg, var(--midnight), var(--night-2));
+    border:1px solid var(--line); border-radius:20px;
+    padding: 36px 30px; max-width:380px; width:100%;
+    box-shadow: 0 0 30px rgba(212,175,106,0.08);
+  }
+  .venue-icon{ font-size:2rem; margin-bottom:10px; }
+  .venue-name{ font-family:'Aref Ruqaa', serif; font-size:1.6rem; color:var(--gold-light); }
+  .venue-city{ margin-top:4px; color:rgba(246,239,224,0.7); }
+  .map-btn{
+    display:inline-block; margin-top:22px; padding: 12px 34px;
+    border:1px solid var(--gold); border-radius:30px; color:var(--gold-light);
+    text-decoration:none; font-size:0.95rem; letter-spacing:1px;
+    position:relative; overflow:hidden; transition: color .3s ease;
+  }
+  .map-btn::before{
+    content:''; position:absolute; inset:0; background:var(--gold);
+    transform: scaleX(0); transform-origin:right; transition: transform .35s ease; z-index:-1;
+  }
+  .map-btn:hover{ color: var(--night); }
+  .map-btn:hover::before{ transform: scaleX(1); }
+
+  footer{
+    text-align:center; padding: 50px 24px 70px;
+    font-family:'Aref Ruqaa', serif; font-size:1.15rem; color: var(--gold-light);
+  }
+  footer .small{ display:block; margin-top:10px; font-family:'Cairo',sans-serif; font-size:0.8rem; color:rgba(246,239,224,0.45); }
+
+  /* ---------- MOBILE READABILITY ---------- */
+  @media (max-width: 480px){
+    .gate-title{ font-size:2.6rem; }
+    .basmala{ font-size:1.7rem; }
+    .ayah{ font-size:1.15rem; }
+    .blessing{ font-size:1.3rem; line-height:2.1; }
+    .eyebrow{ font-size:1.15rem; }
+    .parents{ font-size:1.6rem; line-height:2.1; }
+    .invite-line{ font-size:1.2rem; }
+    .section-title{ font-size:2.3rem; }
+    .section-sub{ font-size:1.05rem; }
+    .tl-title{ font-size:1.75rem; }
+    .tl-time{ font-size:1.3rem; }
+    .venue-name{ font-size:1.85rem; }
+    .venue-city{ font-size:1.15rem; }
+    .map-btn{ font-size:1.1rem; padding:14px 38px; }
+    .open-label{ font-size:1.3rem; }
+    footer{ font-size:1.4rem; }
+    footer .small{ font-size:0.95rem; }
+    .cd-num{ font-size:2.4rem; }
+    .cd-label{ font-size:0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<!-- OPENING GATE -->
+<div id="gate">
+  <div class="panel left">
+    <svg class="branch" viewBox="0 0 300 300" fill="none"><path d="M0 20 Q80 40 100 100 T180 200" stroke="#d4af6a" stroke-width="1"/><circle cx="100" cy="100" r="2" fill="#f3dfa8"/><circle cx="180" cy="200" r="2" fill="#f3dfa8"/><circle cx="60" cy="60" r="1.5" fill="#f3dfa8"/></svg>
+  </div>
+  <button id="open-btn" aria-label="افتح الدعوة">
+    <span class="gate-title">حفل زفاف</span>
+    <span class="heart">
+      <svg viewBox="0 0 32 29" fill="none">
+        <path d="M16 28C16 28 1 18.5 1 8.9C1 3.9 5 0.5 9.3 0.5C12.2 0.5 14.7 2.1 16 4.6C17.3 2.1 19.8 0.5 22.7 0.5C27 0.5 31 3.9 31 8.9C31 18.5 16 28 16 28Z" fill="url(#g)" stroke="#f3dfa8" stroke-width="0.5"/>
+        <defs><linearGradient id="g" x1="16" y1="0" x2="16" y2="28"><stop stop-color="#f3dfa8"/><stop offset="1" stop-color="#c9a44c"/></linearGradient></defs>
+      </svg>
+    </span>
+    <span class="open-label">اضغط لفتح الدعوة</span>
+  </button>
+  <div class="panel right">
+    <svg class="branch" viewBox="0 0 300 300" fill="none"><path d="M0 20 Q80 40 100 100 T180 200" stroke="#d4af6a" stroke-width="1"/><circle cx="100" cy="100" r="2" fill="#f3dfa8"/><circle cx="180" cy="200" r="2" fill="#f3dfa8"/><circle cx="240" cy="240" r="1.5" fill="#f3dfa8"/></svg>
+  </div>
+</div>
+
+<main>
+  <!-- HERO -->
+  <section id="hero">
+    <p class="basmala">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+    <p class="ayah">﴿ وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا<br>لِتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَوَدَّةً وَرَحْمَةً ﴾</p>
+    <svg class="ornament" viewBox="0 0 120 40" fill="none">
+      <path d="M0 20 H45 M75 20 H120" stroke="#d4af6a" stroke-width="1"/>
+      <circle cx="60" cy="20" r="6" fill="none" stroke="#d4af6a" stroke-width="1"/>
+      <circle cx="60" cy="20" r="2" fill="#d4af6a"/>
+    </svg>
+    <p class="blessing">بمزيد من الفرح والسرور نتشرف بدعوتكم<br>لمشاركتنا أجمل لحظات حياتنا</p>
+    <p class="eyebrow">يتشرّف</p>
+    <p class="parents">السيد علي الشابي<br>و<br>السيد عليّة الشابي</p>
+    <p class="invite-line">بدعوتكم لتشريفهم بحضور حفل زفاف أبنائهم</p>
+    <div class="names">
+      <span class="name">غازي</span>
+      <svg class="and-star" viewBox="0 0 24 24" fill="#d4af6a"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>
+      <span class="name">مها</span>
+    </div>
+    <div class="scroll-cue">⌄</div>
+  </section>
+
+  <!-- COUNTDOWN -->
+  <section id="countdown-section">
+    <h2 class="section-title">العد التنازلي</h2>
+    <p class="section-sub">لحظات تفصلنا عن الفرحة</p>
+    <div class="countdown">
+      <div class="cd-unit"><div class="cd-num" id="cd-days">00</div><div class="cd-label">يوم</div></div>
+      <div class="cd-unit"><div class="cd-num" id="cd-hours">00</div><div class="cd-label">ساعة</div></div>
+      <div class="cd-unit"><div class="cd-num" id="cd-mins">00</div><div class="cd-label">دقيقة</div></div>
+      <div class="cd-unit"><div class="cd-num" id="cd-secs">00</div><div class="cd-label">ثانية</div></div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="program">
+    <h2 class="section-title">برنامج الحفل</h2>
+    <p class="section-sub">28 أوت 2026</p>
+    <div class="timeline">
+      <div class="tl-line" id="tl-line"></div>
+      <div class="tl-item" data-index="0">
+        <div class="tl-icon">🕗</div>
+        <div class="tl-title">الحنّة</div>
+        <div class="tl-time">20:00</div>
+      </div>
+      <div class="tl-item" data-index="1">
+        <div class="tl-icon">🕙</div>
+        <div class="tl-title">الزفاف</div>
+        <div class="tl-time">22:00</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section id="location">
+    <h2 class="section-title">مكان الحفل</h2>
+    <div class="venue-card">
+      <div class="venue-icon">📍</div>
+      <div class="venue-name">قاعة أفراح مهيار</div>
+      <div class="venue-city">تستور</div>
+      <a class="map-btn" href="https://maps.app.goo.gl/ZNGVzBxDeNHe3CMd9?g_st=afm" target="_blank" rel="noopener">عرض الموقع</a>
+    </div>
+  </section>
+
+  <footer>
+    بحضوركم تكتمل فرحتنا 🤍
+    <span class="small">غازي و مها — 28 أوت 2026</span>
+  </footer>
+</main>
+
+<script>
+/* ---------- STARFIELD ---------- */
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let w, h, stars = [];
+function resize(){
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight * (document.body.scrollHeight / window.innerHeight);
+  h = Math.max(h, document.body.scrollHeight);
+  canvas.height = h;
+  stars = [];
+  const count = Math.floor((w*h)/9000);
+  for(let i=0;i<count;i++){
+    stars.push({
+      x: Math.random()*w,
+      y: Math.random()*h,
+      r: Math.random()*1.4+0.3,
+      phase: Math.random()*Math.PI*2,
+      speed: 0.4+Math.random()*0.8
+    });
+  }
+}
+window.addEventListener('resize', resize);
+setTimeout(resize, 300);
+resize();
+
+let shootTimer = 0, shoot = null;
+function draw(t){
+  ctx.clearRect(0,0,w,h);
+  for(const s of stars){
+    const alpha = 0.35 + 0.65*Math.abs(Math.sin(t*0.0007*s.speed + s.phase));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(243,223,168,${alpha})`;
+    ctx.fill();
+  }
+  // shooting star
+  shootTimer++;
+  if(!shoot && shootTimer > 220 && Math.random() < 0.02){
+    shoot = { x: Math.random()*w*0.6, y: Math.random()*h*0.3, len: 0 };
+    shootTimer = 0;
+  }
+  if(shoot){
+    shoot.len += 14;
+    shoot.x += 6; shoot.y += 4;
+    const grad = ctx.createLinearGradient(shoot.x, shoot.y, shoot.x - shoot.len, shoot.y - shoot.len*0.66);
+    grad.addColorStop(0, 'rgba(243,223,168,0.9)');
+    grad.addColorStop(1, 'rgba(243,223,168,0)');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(shoot.x, shoot.y);
+    ctx.lineTo(shoot.x - shoot.len, shoot.y - shoot.len*0.66);
+    ctx.stroke();
+    if(shoot.len > 160) shoot = null;
+  }
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+/* ---------- GATE OPEN ---------- */
+const gate = document.getElementById('gate');
+document.getElementById('open-btn').addEventListener('click', () => {
+  gate.classList.add('open');
+  setTimeout(()=> gate.classList.add('hidden'), 1500);
+  document.body.style.overflow = 'auto';
+});
+document.body.style.overflow = 'hidden';
+
+/* ---------- COUNTDOWN ---------- */
+const target = new Date('2026-08-28T20:00:00');
+const els = {
+  d: document.getElementById('cd-days'),
+  h: document.getElementById('cd-hours'),
+  m: document.getElementById('cd-mins'),
+  s: document.getElementById('cd-secs')
+};
+let prev = {d:'',h:'',m:'',s:''};
+function pad(n){ return String(n).padStart(2,'0'); }
+function tick(){
+  const diff = Math.max(0, target - new Date());
+  const d = Math.floor(diff/86400000);
+  const h = Math.floor(diff/3600000)%24;
+  const m = Math.floor(diff/60000)%60;
+  const s = Math.floor(diff/1000)%60;
+  const vals = {d:pad(d), h:pad(h), m:pad(m), s:pad(s)};
+  for(const k of ['d','h','m','s']){
+    if(vals[k] !== prev[k]){
+      els[k].textContent = vals[k];
+      els[k].classList.add('flip');
+      setTimeout(()=> els[k].classList.remove('flip'), 250);
+      prev[k] = vals[k];
+    }
+  }
+}
+tick();
+setInterval(tick, 1000);
+
+/* ---------- TIMELINE SCROLL REVEAL ---------- */
+const tlItems = document.querySelectorAll('.tl-item');
+const tlLine = document.getElementById('tl-line');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      const idx = parseInt(e.target.dataset.index);
+      const pct = ((idx+1) / tlItems.length) * 100;
+      tlLine.style.height = pct + '%';
+    }
+  });
+}, { threshold: 0.4 });
+tlItems.forEach(item => io.observe(item));
+</script>
+</body>
+</html>
